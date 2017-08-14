@@ -2,6 +2,7 @@ package jp.co.rakus.stockmanagement.repository;
 
 import jp.co.rakus.stockmanagement.domain.Member;
 
+import org.postgresql.util.PSQLException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.RowMapper;
@@ -53,13 +54,33 @@ public class MemberRepository {
 			return null;
 		}
 	}
+	/**
+	 * メールアドレスからメンバーを取得.
+	 * @param mailAddress メールアドレス
+	 * @return メンバー情報.メンバーが存在しない場合はnull.
+	 */
+	public Member findByMailAddress(String mailAddress) {
+		SqlParameterSource param = new MapSqlParameterSource();
+		Member member = null;
+		try{
+			member = jdbcTemplate.queryForObject(
+					"SELECT id,name,mail_address,password FROM members WHERE mail_address= '"
+							+ mailAddress + "'",
+							param, 
+							MEMBER_ROW_MAPPER);
+			return member;
+		} catch(DataAccessException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 
 	/**
 	 * メンバー情報を保存　または　更新する.
 	 * @param member　保存または更新するメンバー情報
 	 * @return　保存または更新されたメンバー情報
 	 */
-	public Member save(Member member) {
+	public Member save(Member member){
 		SqlParameterSource param = new BeanPropertySqlParameterSource(member);
 		if (member.getId() == null) {
 			jdbcTemplate.update(

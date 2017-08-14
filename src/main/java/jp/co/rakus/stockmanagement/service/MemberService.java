@@ -3,6 +3,7 @@ package jp.co.rakus.stockmanagement.service;
 import jp.co.rakus.stockmanagement.domain.Member;
 import jp.co.rakus.stockmanagement.repository.MemberRepository;
 
+import org.postgresql.util.PSQLException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,12 +26,16 @@ public class MemberService {
 //		return memberRepository.findOne(id);
 //	}
 	
+	public Member findOneByMailAddress(String mailAddress){
+		return memberRepository.findByMailAddress(mailAddress);
+	}
 	public Member findOneByMailAddressAndPassword(String mailAddress, String password){
 		return memberRepository.findByMailAddressAndPassword(mailAddress, password);
 	}
 	
 	public Member save(Member member){
-		return memberRepository.save(member);
+	
+			return memberRepository.save(member);
 	}
 	
 //	public Member update(Member member){

@@ -1,8 +1,10 @@
 package jp.co.rakus.stockmanagement.web;
 
+import org.postgresql.util.PSQLException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -62,8 +64,18 @@ public class MemberController {
 		}
 		
 		Member member = new Member();
+		String inputMailAddress = form.getMailAddress();
+		member = memberService.findOneByMailAddress(inputMailAddress);
+		
+		if(member != null){
+			model.addAttribute("EmailErrorMessage","登録済みのメールアドレスです");
+			return "/member/form";
+		}
+		
 		BeanUtils.copyProperties(form, member);
 		memberService.save(member);
+			
+	
 		return "redirect:/";
 	}
 	

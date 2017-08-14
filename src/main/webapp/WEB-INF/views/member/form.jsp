@@ -23,6 +23,7 @@
 			    <td>
 			    	<form:input path="mailAddress" placeholder="Email"/>
 			    	<form:errors path="mailAddress" cssStyle="color:red"/>
+			    	<c:out value="${EmailErrorMessage}"/>
 			    </td>
 			  </tr>
 			  <tr>
