@@ -1,16 +1,16 @@
 package jp.co.rakus.stockmanagement.repository;
 
-import jp.co.rakus.stockmanagement.domain.Member;
-
-import org.postgresql.util.PSQLException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Repository;
+
+import jp.co.rakus.stockmanagement.domain.Member;
 
 /**
  * membersテーブル操作用のリポジトリクラス.
@@ -69,6 +69,9 @@ public class MemberRepository {
 							param, 
 							MEMBER_ROW_MAPPER);
 			return member;
+		} catch (EmptyResultDataAccessException e) {
+			e.printStackTrace();
+			return null;
 		} catch(DataAccessException e) {
 			e.printStackTrace();
 			return null;

@@ -22,6 +22,19 @@ public class MemberForm {
 	@Pattern(regexp="[a-zA-Z0-9]*" ,message="半角英数で入力してください")
 	@Size(min=8,max=16,message=("8~16文字以内で入力してください"))
 	private String password;
+	/** 確認用パスワード */
+	@Pattern(regexp="[a-zA-Z0-9]*" ,message="半角英数で入力してください")
+	@Size(min=8,max=16,message=("8~16文字以内で入力してください"))
+	private String passwordChecker;
+	
+	
+	
+	public String getPasswordChecker() {
+		return passwordChecker;
+	}
+	public void setPasswordChecker(String passwordChecker) {
+		this.passwordChecker = passwordChecker;
+	}
 	public String getName() {
 		return name;
 	}

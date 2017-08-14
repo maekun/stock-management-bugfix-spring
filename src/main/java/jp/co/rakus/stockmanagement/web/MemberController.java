@@ -1,10 +1,8 @@
 package jp.co.rakus.stockmanagement.web;
 
-import org.postgresql.util.PSQLException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -18,7 +16,7 @@ import jp.co.rakus.stockmanagement.service.MemberService;
 
 /**
  * メンバー関連処理を行うコントローラー.
- * @author igamasayuki
+ * @author hiroki.mae
  *
  */
 @Controller
@@ -59,10 +57,12 @@ public class MemberController {
 	public String create(@Validated MemberForm form, BindingResult bindingResult,
 			RedirectAttributes redirectAttributes,Model model) {
 		
+		//入力値チェックエラーがあるか判定
 		if(bindingResult.hasErrors()){
 			return "/member/form";
 		}
 		
+		//登録済のメールアドレスであるか判定
 		Member member = new Member();
 		String inputMailAddress = form.getMailAddress();
 		member = memberService.findOneByMailAddress(inputMailAddress);
@@ -72,9 +72,19 @@ public class MemberController {
 			return "/member/form";
 		}
 		
+		//入力されたパスワードと確認用パスワードが合致しているか判定
+		String inputPassword = form.getPassword();
+		String inputPasswordChecker = form.getPasswordChecker();
 		
-		BeanUtils.copyProperties(form, member);
-		memberService.save(member);
+		if(!(inputPassword.equals(inputPasswordChecker))){
+			model.addAttribute("PasswordErrorMessage","確認用パスワードが一致しません");
+			return "/member/form";
+		}
+		
+		//上記すべてクリアであれば登録実行
+		Member newMember = new Member();
+		BeanUtils.copyProperties(form, newMember);
+		memberService.save(newMember);
 			
 	
 		return "redirect:/";

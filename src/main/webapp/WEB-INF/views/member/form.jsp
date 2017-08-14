@@ -36,6 +36,16 @@
 			    </td>
 			  </tr>
 			  <tr>
+			    <th>
+			     	 確認用パスワード
+			    </th>
+			    <td>
+			    	<form:password path="passwordChecker" placeholder="確認用パスワード"/>
+			    	<form:errors path="passwordChecker" cssStyle="color:red"/>
+			    	<c:out value="${PasswordErrorMessage}"/>
+			    </td>
+			  </tr>
+			  <tr>
 			  	<td></td>
 			    <td>
 					<input class="btn" type="submit" value="登録">
