@@ -38,7 +38,7 @@
 			      価格
 			    </th>
 			    <td>
-			      <c:out value="${book.price}"/>円
+			    	<fmt:formatNumber value="${book.price}" pattern="###,###,###円"/>
 			    </td>
 			  </tr>
 			  <tr>
