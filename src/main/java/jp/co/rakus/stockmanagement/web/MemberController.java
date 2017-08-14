@@ -72,6 +72,7 @@ public class MemberController {
 			return "/member/form";
 		}
 		
+		
 		BeanUtils.copyProperties(form, member);
 		memberService.save(member);
 			
