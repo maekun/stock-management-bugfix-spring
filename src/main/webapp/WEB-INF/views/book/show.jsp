@@ -38,7 +38,7 @@
 			      価格
 			    </th>
 			    <td>
-			    	<fmt:formatNumber value="${book.price}" pattern="###,###,###円"/>"
+			    	<fmt:formatNumber value="${book.price}" pattern="###,###,###円"	/>"
 			    </td>
 			  </tr>
 			  <tr>

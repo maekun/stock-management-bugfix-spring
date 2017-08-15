@@ -2,6 +2,7 @@ package jp.co.rakus.stockmanagement.web;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.StandardPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -16,6 +17,7 @@ import jp.co.rakus.stockmanagement.service.MemberService;
 
 /**
  * メンバー関連処理を行うコントローラー.
+ * 
  * @author hiroki.mae
  *
  */
@@ -29,6 +31,7 @@ public class MemberController {
 
 	/**
 	 * フォームを初期化します.
+	 * 
 	 * @return フォーム
 	 */
 	@ModelAttribute
@@ -45,7 +48,7 @@ public class MemberController {
 		
 		return "/member/form";
 	}
-	
+
 	/**
 	 * メンバー情報を登録します.
 	 * @param form フォーム
@@ -55,12 +58,9 @@ public class MemberController {
 	 */
 	@RequestMapping(value = "create")
 	public String create(@Validated MemberForm form, BindingResult bindingResult,
-			RedirectAttributes redirectAttributes,Model model) {
+			RedirectAttributes redirectAttributes,Model model
+			) {
 		
-		//入力値チェックエラーがあるか判定
-		if(bindingResult.hasErrors()){
-			return "/member/form";
-		}
 		
 		//登録済のメールアドレスであるか判定
 		Member member = new Member();
@@ -69,7 +69,7 @@ public class MemberController {
 		
 		if(member != null){
 			bindingResult.rejectValue("mailAddress", null, "登録済みのメールアドレスです");
-			return "/member/form";
+//			return "/member/form";
 		}
 		
 		//入力されたパスワードと確認用パスワードが合致しているか判定
@@ -78,16 +78,22 @@ public class MemberController {
 		
 		if(!(inputPassword.equals(inputPasswordChecker))){
 			bindingResult.rejectValue("passwordChecker", null, "確認用パスワードが一致しません");
+//			return "/member/form";
+		}
+		//入力値チェックエラーがあるか判定
+		if(bindingResult.hasErrors()){
 			return "/member/form";
 		}
 		
 		//上記すべてクリアであれば登録実行
 		Member newMember = new Member();
 		BeanUtils.copyProperties(form, newMember);
+		StandardPasswordEncoder passwordEncoder = new StandardPasswordEncoder();
+		String encodePassword = passwordEncoder.encode(inputPassword);
+		newMember.setPassword(encodePassword);
 		memberService.save(newMember);
 			
 	
 		return "redirect:/";
 	}
-	
 }

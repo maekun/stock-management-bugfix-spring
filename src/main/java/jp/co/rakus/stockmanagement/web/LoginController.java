@@ -43,7 +43,12 @@ public class LoginController {
 	 * @return ログイン画面
 	 */
 	@RequestMapping
-	public String index() {
+	//SecurityConfigのhttp.formLogin().failureurlのところでリクエストパラメータにerror=trueが設定されている
+	//errorがtrueの時は入力値チェックが終わってログイン失敗した時のエラーメッセージを設定しておく
+	public String index(boolean error,Model model) {
+		if(error){
+			model.addAttribute("loginerror", "メールアドレスまたはパスワードが違います。");
+		}
 		return "loginForm";
 	}
 	
@@ -58,7 +63,7 @@ public class LoginController {
 	public String login(@Validated LoginForm form,
 			BindingResult result,RedirectAttributes redirectAttributes, Model model) {
 		if (result.hasErrors()){
-			return index();
+			return index(false,model);
 		}
 		String mailAddress = form.getMailAddress();
 		String password = form.getPassword();
@@ -66,7 +71,7 @@ public class LoginController {
 		if (member == null) {
 			ObjectError error = new ObjectError("loginerror", "メールアドレスまたはパスワードが違います。");
             result.addError(error);
-			return index();
+			return index(false,model);
 		}
 		session.setAttribute("member", member);
 		return "redirect:/book/list";

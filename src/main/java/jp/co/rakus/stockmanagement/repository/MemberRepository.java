@@ -16,6 +16,10 @@ import jp.co.rakus.stockmanagement.domain.Member;
  * membersテーブル操作用のリポジトリクラス.
  * @author igamasayuki
  */
+/**
+ * @author hiroki.mae
+ *
+ */
 @Repository
 public class MemberRepository {
 	
@@ -76,10 +80,15 @@ public class MemberRepository {
 		}
 	}
 
+
 	/**
 	 * メンバー情報を保存　または　更新する.
 	 * @param member　保存または更新するメンバー情報
 	 * @return　保存または更新されたメンバー情報
+	 */
+	/**
+	 * @param member
+	 * @return
 	 */
 	public Member save(Member member){
 		SqlParameterSource param = new BeanPropertySqlParameterSource(member);
