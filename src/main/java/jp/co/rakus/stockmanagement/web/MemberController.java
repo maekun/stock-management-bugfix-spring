@@ -68,7 +68,7 @@ public class MemberController {
 		member = memberService.findOneByMailAddress(inputMailAddress);
 		
 		if(member != null){
-			model.addAttribute("EmailErrorMessage","登録済みのメールアドレスです");
+			bindingResult.rejectValue("mailAddress", null, "登録済みのメールアドレスです");
 			return "/member/form";
 		}
 		
@@ -77,7 +77,7 @@ public class MemberController {
 		String inputPasswordChecker = form.getPasswordChecker();
 		
 		if(!(inputPassword.equals(inputPasswordChecker))){
-			model.addAttribute("PasswordErrorMessage","確認用パスワードが一致しません");
+			bindingResult.rejectValue("passwordChecker", null, "確認用パスワードが一致しません");
 			return "/member/form";
 		}
 		

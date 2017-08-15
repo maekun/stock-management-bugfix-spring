@@ -23,7 +23,7 @@
 			    </th>
 			    <td>
 			    	<form:password path="password" placeholder="Password"/>
-			    	<form:errors path="password" />
+			    	<form:errors path="password"/>
 			    </td>
 			  </tr>
 			  <tr>
