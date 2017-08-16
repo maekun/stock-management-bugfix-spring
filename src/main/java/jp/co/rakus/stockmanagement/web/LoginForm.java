@@ -14,6 +14,16 @@ public class LoginForm {
 	/** パスワード */
 	@NotBlank(message = "値を入力してください")
 	private String password;
+	private String errorMassage;
+	
+	
+	
+	public String getErrorMassage() {
+		return errorMassage;
+	}
+	public void setErrorMassage(String errorMassage) {
+		this.errorMassage = errorMassage;
+	}
 	public String getMailAddress() {
 		return mailAddress;
 	}

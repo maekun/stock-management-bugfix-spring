@@ -22,7 +22,17 @@ public class LoginMemberDetailsService implements UserDetailsService{
 	@Autowired
 	private MemberRepository memberRepository;
 
+	
+	
+	public LoginMemberDetailsService() {
+		super();
+	}
+
+
+
 	@Override
+	//おそらく上のクラスにリターンすることでprincipalにuserdetails.Userオブジェクトを格納してくれてる
+	//そして検索ヒットしなかった場合の例外は同じく上にスローすることでいろいろやってくれる
 	public UserDetails loadUserByUsername(String mailAddress) throws UsernameNotFoundException {
 		//入力されたメールアドレスからメンバーを一件検索
 		Member member = memberRepository.findByMailAddress(mailAddress);

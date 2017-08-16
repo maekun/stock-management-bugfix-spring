@@ -1,19 +1,9 @@
 package jp.co.rakus.stockmanagement.web;
 
-import javax.servlet.http.HttpSession;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import jp.co.rakus.stockmanagement.domain.Member;
-import jp.co.rakus.stockmanagement.service.MemberService;
 
 /**
  * ログイン関連処理を行うコントローラー.
@@ -23,11 +13,15 @@ import jp.co.rakus.stockmanagement.service.MemberService;
 @Controller
 @RequestMapping("/")
 public class LoginController {
-
-	@Autowired
-	private MemberService memberService;
-	@Autowired
-	private HttpSession session;
+	
+//	@Autowired
+//	private MemberService memberService;
+//	@Autowired
+//	private HttpSession session;
+	@ModelAttribute
+	public LoginForm setUpLoginForm(){
+		return new LoginForm();
+	}
 
 	/**
 	 * フォームを初期化します.
@@ -45,35 +39,67 @@ public class LoginController {
 	@RequestMapping
 	//SecurityConfigのhttp.formLogin().failureurlのところでリクエストパラメータにerror=trueが設定されている
 	//errorがtrueの時は入力値チェックが終わってログイン失敗した時のエラーメッセージを設定しておく
-	public String index(boolean error,Model model) {
-		if(error){
-			model.addAttribute("loginerror", "メールアドレスまたはパスワードが違います。");
+	public String index(String error,Model model) {
+		if(Boolean.valueOf(error)){
+			model.addAttribute("errorFrag", error);
+			model.addAttribute("errorMessage", "メールアドレスまたはパスワードが違います。");
 		}
 		return "loginForm";
 	}
 	
-	/**
-	 * ログイン処理を行います.
-	 * @param form　フォーム
-	 * @param result　リザルト
-	 * @param model　モデル
-	 * @return　ログイン成功時：書籍リスト画面
-	 */
-	@RequestMapping(value = "/login")
-	public String login(@Validated LoginForm form,
-			BindingResult result,RedirectAttributes redirectAttributes, Model model) {
-		if (result.hasErrors()){
-			return index(false,model);
-		}
-		String mailAddress = form.getMailAddress();
-		String password = form.getPassword();
-		Member member = memberService.findOneByMailAddressAndPassword(mailAddress, password);
-		if (member == null) {
-			ObjectError error = new ObjectError("loginerror", "メールアドレスまたはパスワードが違います。");
-            result.addError(error);
-			return index(false,model);
-		}
-		session.setAttribute("member", member);
-		return "redirect:/book/list";
-	}
+///**
+// * ログイン処理を行います.
+// * @param form　フォーム
+// * @param result　リザルト
+// * @param model　モデル
+// * @return　ログイン成功時：書籍リスト画面
+// */
+//@RequestMapping(value = "/login")
+//public String login(@Validated LoginForm form,
+//		BindingResult result,RedirectAttributes redirectAttributes, Model model,
+//		@AuthenticationPrincipal LoginMemberDetailsService loginMemberDetailsService ) {
+//	
+//	if (result.hasErrors()){
+//		return index(false,model);
+//	}
+//	
+//	String inputMailAddress = form.getMailAddress();
+//	String inputPassword = form.getPassword();
+//	Member member = memberService.findOneByMailAddressAndPassword(inputMailAddress,inputPassword );
+//	if (member == null) {
+//		ObjectError error = new ObjectError("loginerror", "メールアドレスまたはパスワードが違います。");
+//		result.addError(error);
+//		return index(false,model);
+//	}
+//	session.setAttribute("member",member);
+//	return "redirect:/book/list";
+//}
 }
+
+//	/**
+//	 * ログイン処理を行います.
+//	 * @param form　フォーム
+//	 * @param result　リザルト
+//	 * @param model　モデル
+//	 * @return　ログイン成功時：書籍リスト画面
+//	 */
+//	@RequestMapping(value = "/login")
+//	public String login(@Validated LoginForm form,
+//			BindingResult result,RedirectAttributes redirectAttributes, Model model) {
+//		if (result.hasErrors()){
+//			return index(false,model);
+//		}
+//		String mailAddress = form.getMailAddress();
+//		LoginMemberDetailsService detailsService = new LoginMemberDetailsService();
+//		LoginMemberDetails memberDetails = (LoginMemberDetails) detailsService.loadUserByUsername(mailAddress);
+//		Member member = memberDetails.getMember();
+//////		
+//////		Member member = memberService.findOneByMailAddressAndPassword(mailAddress, password);
+//////		if (member == null) {
+//////			ObjectError error = new ObjectError("loginerror", "メールアドレスまたはパスワードが違います。");
+//////            result.addError(error);
+//////			return index(false,model);
+//////		}
+//		session.setAttribute("member",member);
+//		return "redirect:/book/list";
+//	}

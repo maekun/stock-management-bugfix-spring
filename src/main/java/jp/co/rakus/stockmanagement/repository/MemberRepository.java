@@ -57,6 +57,7 @@ public class MemberRepository {
 			return null;
 		}
 	}
+	
 	/**
 	 * メールアドレスからメンバーを取得.
 	 * @param mailAddress メールアドレス

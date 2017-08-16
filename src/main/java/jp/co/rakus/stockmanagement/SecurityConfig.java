@@ -1,6 +1,7 @@
 package jp.co.rakus.stockmanagement;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configurers.GlobalAuthenticationConfigurerAdapter;
@@ -15,6 +16,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 //import org.springframework.security.web.util.AntPathRequestMatcher;
 //SpringSecurityの基本的な設定（認証フィルタ等）が行われる
+@Configuration
 @EnableWebMvcSecurity
 //継承をすることでデフォルトの設定に対して「追加したい箇所」だけ「オーバーライド」して設定できるようになる
 public class SecurityConfig extends WebSecurityConfigurerAdapter{ 
@@ -22,7 +24,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	@Override
 	public void configure(WebSecurity web) throws Exception {
 		//「静的リソース」に対するアクセスには「セキュリティ設定」は無視するようにする
-		web.ignoring().antMatchers("/webjars/**" , "/css/**");
+		web.ignoring().antMatchers("/webjars/**" , "/css/**","/img/**","/fonts/**","/js/**");
 	}
 	
 	@Override
@@ -33,24 +35,25 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 		//パス指定（URL）だからRequestMappingを書いてあげる
 		//それ以外のパスには認証なしでアクセスできないようにする。
 		http.authorizeRequests()
-						.antMatchers("/").permitAll()
-						.antMatchers("/login").permitAll()
-						.antMatchers("/member/form").permitAll()
-						.antMatchers("/member/create").permitAll()
+						.antMatchers("/","/member/form","/member/create").permitAll()
 						.anyRequest().authenticated();
 		//ログインフォームに関する設定
 		http.formLogin()
-						//ログイン認証処理のパス
-						.loginProcessingUrl("/login")
 						//ログインフォーム表示のパス(ログインフォーム
 						.loginPage("/")
+						//ログイン認証処理のパス
+						.loginProcessingUrl("/login")
 						//認証失敗時の遷移先
 						.failureUrl("/?error=true")
 						//認証成功時の遷移先(書籍一覧表示
-						//true/falseでショッピングカートから会計に進むときにログインしていなければログイン画面に遷移し、
+						//true/falseで遷移先を分ける
+						//trueなら第一引数のパスを必ず実行し遷移する
+						//falseショッピングカートから会計に進むときにログインしていなければログイン画面に遷移し、
 						//ログイン後にbooklistに移動せず直接会計に進むようにできる
-						.defaultSuccessUrl("/book/list",true)
-						//ユーザ名・パスワードのパラメータ名を設定(フォームクラスのプロパティに沿っていればいいのかな？？？？？？？？？？？
+						.defaultSuccessUrl("/book/list",false)
+						//ユーザ名・パスワードのパラメータ名を設定(フォームのリクエストパラメータ　ログイン認証処理を自動でスプリングが行う
+						//コンフィグの下部で改めて設定しているuserDetailsService(userDetailsService)で設定している
+						//Serviceクラスにパラメータを渡している
 						.usernameParameter("mailAddress").passwordParameter("password")
 						.and();
 		//ログアウトに関する設定
@@ -86,5 +89,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 		}
 		
 		
+	}
+	
+	@Bean
+	public PasswordEncoder passwordEncoder(){
+		return new StandardPasswordEncoder();
 	}
 }

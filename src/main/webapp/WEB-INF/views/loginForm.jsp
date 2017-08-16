@@ -5,7 +5,14 @@
 	<div class="span8">
 		<img src="img/logo.gif" >
 		<div class="row">
-		<form:errors path="loginForm.*" />
+		<%--
+			<form:errors path="loginForm.*" />
+		 --%>
+		 <span class="loginErrorMessage">
+			<c:if test="${errorFrag == true}">
+				<c:out value="${errorMessage}"/>
+			</c:if>
+		 </span>
 		<form:form modelAttribute="loginForm" action="${pageContext.request.contextPath}/login">
 			<table class="table table-striped">
 			  <tr>

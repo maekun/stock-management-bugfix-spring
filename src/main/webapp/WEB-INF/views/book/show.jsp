@@ -2,7 +2,10 @@
 <%@ include file="../common/common.jsp"  %>
 <body>
 <div class="container">
-	<c:out value="${member.name}"/>さん　こんにちは！<br>
+	<sec:authorize access="hasRole('ROLE_USER') and isAuthenticated()">
+		<sec:authentication var="memberName" property="principal.member.name"/>
+			<c:out value="${memberName} さん"></c:out>
+	</sec:authorize>
 	<a href="${pageContext.request.contextPath}/logout/sessionInvalidate">ログアウト</a>
 	<h3>書籍在庫数変更画面</h3>
 	<div class="span8">
