@@ -10,6 +10,8 @@ import java.sql.Date;
  */
 public class EntryBook {
 
+	/** 書籍id*/
+	private Integer id;
 	/** 書籍名*/
 	private String name;
 	/** 著者*/
@@ -28,6 +30,13 @@ public class EntryBook {
 	private String image;
 	/** 在庫数*/
 	private Integer stock;
+	
+	public Integer getId() {
+		return id;
+	}
+	public void setId(Integer id) {
+		this.id = id;
+	}
 	public String getName() {
 		return name;
 	}
