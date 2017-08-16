@@ -2,6 +2,7 @@ package jp.co.rakus.stockmanagement.web;
 
 import java.util.List;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -92,22 +93,26 @@ public class BookController {
 	public String entryPage(Model model) {
 		return "book/entryBook";
 	}
-//	/**
-//	 * 書籍追加を行います.
-//	 * @param form フォーム
-//	 * @param result リザルト情報
-//	 * @param model　モデル
-//	 * @return　書籍リスト画面
-//	 */
-//	@RequestMapping(value = "insert")
-//	public String insert(@Validated BookForm form, BindingResult result, Model model) {
-//		if (result.hasErrors()) {
-//			return show(form.getId(), model);
-//		}
-//		//idの最大を取得してきて
-//		//idに１足してそれをnewbookにセットしinsertする
-//	：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：
-//		return list(model);
-//	}
+	/**
+	 * 書籍追加を行います.
+	 * @param form フォーム
+	 * @param result リザルト情報
+	 * @param model　モデル
+	 * @return　書籍リスト画面
+	 */
+	@RequestMapping(value = "insert")
+	public String insert(@Validated BookForm form, BindingResult result, Model model) {
+		if (result.hasErrors()) {
+			return show(form.getId(), model);
+		}
+		Book book = new Book();
+		BeanUtils.copyProperties(form,book);
+		//idの最大を取得し、1を足してbookにセットする
+		Integer maxId = bookService.getMaxId();
+		book.setId( maxId + 1 );
+		bookService.insert(book);
+		
+		return list(model);
+	}
 
 }
