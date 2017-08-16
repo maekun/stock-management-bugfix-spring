@@ -2,9 +2,6 @@ package jp.co.rakus.stockmanagement.web;
 
 import java.util.List;
 
-import jp.co.rakus.stockmanagement.domain.Book;
-import jp.co.rakus.stockmanagement.service.BookService;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,6 +11,9 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import jp.co.rakus.stockmanagement.domain.Book;
+import jp.co.rakus.stockmanagement.service.BookService;
 
 /**
  * 書籍関連処理を行うコントローラー.
@@ -27,6 +27,10 @@ public class BookController {
 	
 	@Autowired
 	private BookService bookService;
+	@ModelAttribute
+	public EntryBookForm setEntryBookFormUp(){
+		return new EntryBookForm();
+	}
 	
 	/**
 	 * フォームを初期化します.
@@ -79,5 +83,31 @@ public class BookController {
 		bookService.update(book);
 		return list(model);
 	}
+	/**
+	 * 書籍追加画面を表示します.
+	 * @param model　モデル
+	 * @return　書籍追加画面
+	 */
+	@RequestMapping(value = "entryPage")
+	public String entryPage(Model model) {
+		return "book/entryBook";
+	}
+//	/**
+//	 * 書籍追加を行います.
+//	 * @param form フォーム
+//	 * @param result リザルト情報
+//	 * @param model　モデル
+//	 * @return　書籍リスト画面
+//	 */
+//	@RequestMapping(value = "insert")
+//	public String insert(@Validated BookForm form, BindingResult result, Model model) {
+//		if (result.hasErrors()) {
+//			return show(form.getId(), model);
+//		}
+//		//idの最大を取得してきて
+//		//idに１足してそれをnewbookにセットしinsertする
+//	：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：
+//		return list(model);
+//	}
 
 }

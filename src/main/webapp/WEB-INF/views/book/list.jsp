@@ -26,6 +26,14 @@
 			</table>
 		</div>
 	</div>
+	<form action="${pageContext.request.contextPath}/book/entryPage">
+		<input type="submit" value="新規書籍登録">
+	</form>
+	<%--
+		<sec:authentication var="principal" property="${principal}">
+			<input type="hidden" value="${principal.}">
+		</sec:authentication>
+	 --%>
 </div>
 </body>
 </html>
