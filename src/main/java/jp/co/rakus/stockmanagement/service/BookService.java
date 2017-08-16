@@ -6,9 +6,6 @@ import jp.co.rakus.stockmanagement.domain.Book;
 import jp.co.rakus.stockmanagement.repository.BookRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
-import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Service;
 
 /**

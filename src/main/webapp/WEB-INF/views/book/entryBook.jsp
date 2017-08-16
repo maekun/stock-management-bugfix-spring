@@ -5,7 +5,7 @@
 	<h3>書籍登録画面</h3>
 	<div class="span8">
 		<div class="row">
-		<form:form modelAttribute="entryBookForm" action="${pageContext.request.contextPath}/book/insert">
+		<form:form modelAttribute="entryBookForm" enctype="multipart/form-data" action="${pageContext.request.contextPath}/book/insert">
 			<table class="table table-striped">
 			  <tr>
 			    <th>
@@ -75,7 +75,7 @@
 			     	 画像
 			    </th>
 			    <td>
-			    	<form:input path="image"  placeholder="画像"/>
+			    	<form:input type="file" path="image"  placeholder="画像"/>
 			    	<form:errors path="image" cssStyle="color:red"/>
 			    </td>
 			  </tr>

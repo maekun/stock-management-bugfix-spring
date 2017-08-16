@@ -4,7 +4,12 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import javax.servlet.annotation.MultipartConfig;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+
+import org.hibernate.validator.constraints.NotBlank;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 新規で追加する書籍を表すフォームクラス.
@@ -15,29 +20,45 @@ import javax.validation.constraints.Pattern;
 public class EntryBookForm {
 
 	/** 書籍名*/
+	@NotBlank(message="入力してください")
 	private String name;
 	/** 著者*/
+	@NotBlank(message="入力してください")
 	private String author;
-	/** 出版社*/
+	/** 出版社*/	
+	@NotBlank(message="入力してください")
 	private String publisher;
 	/** 価格*/
+	@NotNull(message="入力してください")
 	private String price;
 	/** ISBNコード*/
 //	[0-9\-] 0〜9か- が当てはまっているものを検索ってこと。
 //	{9,16} は、[0-9\-]が9桁〜16桁であるものってこと。
 //	[0-9X] が、0〜9かxが、当てはまっているってこと。
+	@NotBlank(message="入力してください")
 	@Pattern(regexp="[0-9¥-]{9,16}[0-9X]",message="#-####-####-#のようなフォーマットに従い入力してください")
 	private String isbncode;
 	/** 発売日*/
+	@NotBlank(message="入力してください")
+	@NotNull(message="数字入力してください")
 	private String saledate;
 	/** 説明*/
+	@NotBlank(message="入力してください")
 	private String explanation;
 	/** 画像*/
-	private String image;
+	private MultipartFile image;
 	/** 在庫数*/
+	@NotBlank(message="入力してください")
 	private String stock;
-	
-	
+
+	public MultipartFile getImage() {
+		return this.image;
+	}
+	public void setImage(MultipartFile image) {
+		this.image = image;
+	}
+
+
 	public Date getDateSaledate() {
 		
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
@@ -96,12 +117,6 @@ public class EntryBookForm {
 	}
 	public void setExplanation(String explanation) {
 		this.explanation = explanation;
-	}
-	public String getImage() {
-		return image;
-	}
-	public void setImage(String image) {
-		this.image = image;
 	}
 	public String getStock() {
 		return stock;

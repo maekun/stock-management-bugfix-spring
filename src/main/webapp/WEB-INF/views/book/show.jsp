@@ -73,7 +73,7 @@
 			      画像
 			    </th>
 			    <td>
-			      <img src="img/<c:out value="${book.image}"/>"/>
+			      <img src="data:image/jpeg;base64,${book.image}"/>
 			    </td>
 			  </tr>
 			  <tr>
@@ -82,11 +82,11 @@
 			    </th>
 			    <td>
 			    	<form:errors path="bookForm.*"/>
-					<form action="/book/update" method="post">
+					<form:form action="/book/update" method="post">
 						<input type="text" name="stock"  value="<c:out value="${book.stock}"/>">
 						<input type="hidden" name="id" value="<c:out value="${book.id}"/>">
 						<input class="btn" type="submit" value="更新">
-					</form>
+					</form:form>
 			    </td>
 			  </tr>
 			</table>
